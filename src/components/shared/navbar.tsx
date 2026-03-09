@@ -5,10 +5,11 @@ import { cn } from "@/lib/utils";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { useSession, signOut } from "@/lib/auth/auth-client";
-import { Terminal, Menu, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { TransitionLink } from "@/components/shared/transition-link";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import Image from "next/image";
 
 interface NavbarProps {
   className?: string;
@@ -31,7 +32,7 @@ export function Navbar({ className }: NavbarProps) {
   return (
     <div
       className={cn(
-        "fixed top-0 inset-x-0 w-full z-[100] font-mono transition-all duration-300",
+        "fixed top-0 inset-x-0 w-full z-[100] transition-all duration-300",
         className
       )}
     >
@@ -40,28 +41,41 @@ export function Navbar({ className }: NavbarProps) {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className={cn(
-          "relative flex items-center justify-between px-6 md:px-12 py-5 border-b-2 transition-all duration-300",
-          "bg-black border-red-900/40"
+          "relative flex items-center justify-between px-6 lg:px-16 py-4 transition-all duration-300",
+          scrolled
+            ? "bg-black/95 backdrop-blur-md border-b border-white/10"
+            : "bg-black/80 backdrop-blur-sm border-b border-white/5"
         )}
       >
-        {/* Left: Company Name */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="p-2 bg-red-600 text-black border-2 border-transparent transition-colors">
-            <Terminal size={20} strokeWidth={3} />
-          </div>
-          <span className="text-xl font-black text-white tracking-tighter uppercase transition-all duration-300">
-            Zharnyx <span className="text-red-500">Academy</span>
+        {/* Left: Logo */}
+        <Link href="/" className="flex items-center gap-2.5">
+          <Image src="https://ik.imagekit.io/bkt3emitco/ChatGPT%20Image%20Mar%209,%202026,%2005_24_01%20AM.png" alt="Logo" width={44} height={44} />
+          <span className="-translate-x-2 text-lg font-bold text-white tracking-tight">
+            ZHARNY<span className="text-red-500">X</span>
           </span>
         </Link>
 
-        {/* Middle: Nav Links - Desktop */}
+        {/* Center: Nav Links - Desktop */}
         <div className="hidden md:flex items-center gap-1">
-          <NavLink href="/" label="Home" />
+          <NavLink href="/" label="Home" active={pathname === "/"} />
+          {/* Programs Dropdown */}
+          <div className="relative group">
+            <NavLink href="/programs" label="Programs" hasDropdown active={pathname === "/programs"} />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-52 pt-3 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
+              <div className="bg-[#111] border border-white/10 rounded-lg shadow-xl flex flex-col py-2">
+                <DropdownItem href="/programs" label="All Programs" />
+                <DropdownItem href="/programs#soc" label="SOC Analyst" />
+                <DropdownItem href="/programs#vapt" label="VAPT" />
+                <DropdownItem href="/programs#cloud" label="Cloud Security" />
+                <DropdownItem href="/programs#dfir" label="DFIR" />
+              </div>
+            </div>
+          </div>
           {/* About Dropdown */}
           <div className="relative group">
-            <NavLink href="/about" label="About" hasDropdown />
-            <div className="absolute top-full left-0 w-56 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
-              <div className="bg-black border-2 border-white/20 shadow-[8px_8px_0px_0px_white] flex flex-col p-2 gap-1">
+            <NavLink href="/about" label="About" hasDropdown active={pathname === "/about"} />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-52 pt-3 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
+              <div className="bg-[#111] border border-white/10 rounded-lg shadow-xl flex flex-col py-2">
                 <DropdownItem href="/about#mission" label="Mission" />
                 <DropdownItem href="/about#core-pillars" label="Core Pillars" />
                 <DropdownItem href="/about#leadership" label="Leadership" />
@@ -69,51 +83,24 @@ export function Navbar({ className }: NavbarProps) {
               </div>
             </div>
           </div>
-          {/* Curriculum Dropdown */}
-          <div className="relative group">
-            <NavLink href="/curriculum" label="Curriculum" hasDropdown />
-            <div className="absolute top-full left-0 w-56 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
-              <div className="bg-black border-2 border-white/20 shadow-[8px_8px_0px_0px_white] flex flex-col p-2 gap-1">
-                <DropdownItem href="/curriculum#foundation" label="Foundation" />
-                <DropdownItem href="/curriculum#specialization" label="Specialization" />
-                <DropdownItem href="/curriculum#convergence" label="Convergence" />
-                <DropdownItem href="/curriculum#internship" label="Internship" />
-                <DropdownItem href="/curriculum#portfolio" label="Portfolio" />
-              </div>
-            </div>
-          </div>
-          <NavLink href="/programs" label="courses" />
-          {/* Why Us Dropdown */}
-          <div className="relative group">
-            <NavLink href="/#why-us" label="why us" hasDropdown />
-            <div className="absolute top-full left-0 w-64 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
-              <div className="bg-black border-2 border-white/20 shadow-[8px_8px_0px_0px_white] flex flex-col p-2 gap-1">
-                <DropdownItem href="/#why-us" label="Architecture" />
-                <DropdownItem href="/#master-plan" label="Master Plan" />
-                <DropdownItem href="/#methodology" label="Methodology" />
-                <DropdownItem href="/#war-room" label="War Rooms" />
-                <DropdownItem href="/#agency-ops" label="Agency Ops" />
-                <DropdownItem href="/#gatekeeping" label="Gatekeeping" />
-                <DropdownItem href="/#deployment-tiers" label="Deployment" />
-              </div>
-            </div>
-          </div>
-          <NavLink href="/contact" label="Contact" />
+          <NavLink href="/pricing" label="Pricing" active={pathname === "/pricing"} />
+          <NavLink href="/blog" label="Blog" active={pathname === "/blog"} />
+          <NavLink href="/contact" label="Contact" active={pathname === "/contact"} />
         </div>
 
         {/* Right: CTA - Desktop */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-5">
           {session ? (
             <>
               <Link
                 href="/dashboard"
-                className="relative px-6 py-2.5 bg-blue-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-blue-600 shadow-[4px_4px_0px_0px_white] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                className="text-sm text-gray-300 hover:text-white transition-colors"
               >
-                Command Center
+                Dashboard
               </Link>
               <button
                 onClick={() => signOut()}
-                className="relative px-6 py-2.5 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600 shadow-[4px_4px_0px_0px_white] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                className="px-5 py-2 bg-red-600 text-white text-sm font-semibold rounded-full hover:bg-red-700 transition-colors"
               >
                 Sign Out
               </button>
@@ -122,15 +109,15 @@ export function Navbar({ className }: NavbarProps) {
             <>
               <Link
                 href="/auth?mode=signin"
-                className="px-6 py-2.5 text-white font-bold text-sm uppercase tracking-wider hover:text-red-500 transition-colors"
+                className="text-sm text-gray-300 hover:text-white transition-colors"
               >
-                Sign In
+                Student Login
               </Link>
               <Link
                 href="/auth?mode=signup"
-                className="relative px-6 py-2.5 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600 shadow-[4px_4px_0px_0px_white] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                className="px-5 py-2 bg-red-600 text-white text-sm font-semibold rounded-sm hover:bg-red-700 transition-colors"
               >
-                Get Started
+                Enroll Now
               </Link>
             </>
           )}
@@ -140,19 +127,28 @@ export function Navbar({ className }: NavbarProps) {
         <div className="md:hidden">
           <Sheet>
             <SheetTrigger asChild>
-              <button className="p-2 text-white border-2 border-white/20 hover:bg-white/10">
-                <Menu size={24} />
+              <button className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors">
+                <Menu size={22} />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-black border-l-2 border-white/20 p-0 w-[300px]">
+            <SheetContent side="right" className="bg-[#0a0a0a] border-l border-white/10 p-0 w-[300px]">
               <div className="flex flex-col h-full">
-                <div className="p-6 border-b border-white/10">
-                  <span className="text-xl font-black text-white tracking-tighter uppercase">
-                    Zharnyx <span className="text-red-500">Academy</span>
+                <div className="p-5 border-b border-white/10 flex items-center justify-between">
+                  <span className="text-lg font-bold text-white tracking-tight">
+                    ZHARNYX<span className="text-red-500">X</span>
                   </span>
                 </div>
-                <div className="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-4">
+                <div className="flex-1 overflow-y-auto py-4 px-3 flex flex-col gap-1">
                   <MobileNavLink href="/" label="Home" />
+
+                  {/* Programs Mobile Dropdown */}
+                  <MobileNavDropdown label="Programs">
+                    <MobileNavLink href="/programs" label="All Programs" />
+                    <MobileNavLink href="/programs#soc" label="SOC Analyst" isChild />
+                    <MobileNavLink href="/programs#vapt" label="VAPT" isChild />
+                    <MobileNavLink href="/programs#cloud" label="Cloud Security" isChild />
+                    <MobileNavLink href="/programs#dfir" label="DFIR" isChild />
+                  </MobileNavDropdown>
 
                   {/* About Mobile Dropdown */}
                   <MobileNavDropdown label="About">
@@ -163,45 +159,22 @@ export function Navbar({ className }: NavbarProps) {
                     <MobileNavLink href="/about#journey" label="Our Journey" isChild />
                   </MobileNavDropdown>
 
-                  {/* Curriculum Mobile Dropdown */}
-                  <MobileNavDropdown label="Curriculum">
-                    <MobileNavLink href="/curriculum" label="Overview" />
-                    <MobileNavLink href="/curriculum#foundation" label="Foundation" isChild />
-                    <MobileNavLink href="/curriculum#specialization" label="Specialization" isChild />
-                    <MobileNavLink href="/curriculum#convergence" label="Convergence" isChild />
-                    <MobileNavLink href="/curriculum#internship" label="Internship" isChild />
-                    <MobileNavLink href="/curriculum#portfolio" label="Portfolio" isChild />
-                  </MobileNavDropdown>
-
-                  <MobileNavLink href="/programs" label="Courses" />
-
-                  {/* Why Us Mobile Dropdown */}
-                  <MobileNavDropdown label="Why Us">
-                    <MobileNavLink href="/#why-us" label="Architecture" isChild />
-                    <MobileNavLink href="/#master-plan" label="Master Plan" isChild />
-                    <MobileNavLink href="/#methodology" label="Methodology" isChild />
-                    <MobileNavLink href="/#war-room" label="War Rooms" isChild />
-                    <MobileNavLink href="/#agency-ops" label="Agency Ops" isChild />
-                    <MobileNavLink href="/#gatekeeping" label="Gatekeeping" isChild />
-                    <MobileNavLink href="/#deployment-tiers" label="Deployment" isChild />
-                  </MobileNavDropdown>
-
-                  <MobileNavLink href="/contact" label="Contact" />
                   <MobileNavLink href="/pricing" label="Pricing" />
-                  <MobileNavLink href="/apply" label="Join Us" />
+                  <MobileNavLink href="/blog" label="Blog" />
+                  <MobileNavLink href="/contact" label="Contact" />
                 </div>
-                <div className="p-6 border-t border-white/10 flex flex-col gap-4">
+                <div className="p-5 border-t border-white/10 flex flex-col gap-3">
                   {session ? (
                     <>
                       <Link
                         href="/dashboard"
-                        className="w-full text-center px-6 py-3 bg-blue-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-blue-600"
+                        className="w-full text-center px-5 py-2.5 text-white text-sm font-semibold border border-white/20 rounded-lg hover:bg-white/5 transition-colors"
                       >
-                        Command Center
+                        Dashboard
                       </Link>
                       <button
                         onClick={() => signOut()}
-                        className="w-full px-6 py-3 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600"
+                        className="w-full px-5 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors"
                       >
                         Sign Out
                       </button>
@@ -210,15 +183,15 @@ export function Navbar({ className }: NavbarProps) {
                     <>
                       <Link
                         href="/auth?mode=signin"
-                        className="w-full text-center px-6 py-3 text-white font-bold text-sm uppercase tracking-wider border-2 border-white/20 hover:bg-white/10"
+                        className="w-full text-center px-5 py-2.5 text-white text-sm font-semibold border border-white/20 rounded-lg hover:bg-white/5 transition-colors"
                       >
-                        Sign In
+                        Student Login
                       </Link>
                       <Link
                         href="/auth?mode=signup"
-                        className="w-full text-center px-6 py-3 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600"
+                        className="w-full text-center px-5 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors"
                       >
-                        Get Started
+                        Enroll Now
                       </Link>
                     </>
                   )}
@@ -232,17 +205,20 @@ export function Navbar({ className }: NavbarProps) {
   );
 }
 
-function NavLink({ href, label, hasDropdown }: { href: string; label: string; hasDropdown?: boolean }) {
+function NavLink({ href, label, hasDropdown, active }: { href: string; label: string; hasDropdown?: boolean; active?: boolean }) {
   return (
     <TransitionLink
       href={href}
-      className="px-5 py-2 text-sm font-medium text-gray-400 uppercase tracking-wide hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-all rounded-none flex items-center gap-1.5"
+      className={cn(
+        "px-4 py-2 text-sm font-medium transition-colors flex items-center gap-1",
+        active ? "text-red-500" : "text-gray-400 hover:text-white"
+      )}
     >
       {label}
       {hasDropdown && (
         <ChevronDown
-          size={14}
-          className="transition-transform duration-300 group-hover:-rotate-180"
+          size={13}
+          className="transition-transform duration-200 group-hover:-rotate-180"
         />
       )}
     </TransitionLink>
@@ -253,20 +229,21 @@ function DropdownItem({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-colors uppercase tracking-wide"
+      className="block px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
     >
       {label}
     </Link>
   );
 }
+
 function MobileNavLink({ href, label, isChild }: { href: string; label: string; isChild?: boolean }) {
   return (
     <SheetClose asChild>
       <Link
         href={href}
         className={cn(
-          "block py-3 font-bold uppercase hover:text-white hover:bg-white/5 border-l-2 border-transparent hover:border-red-500 transition-all",
-          isChild ? "px-8 text-base text-gray-400" : "px-4 text-lg text-gray-300"
+          "block py-2.5 rounded-lg hover:text-white hover:bg-white/5 transition-all",
+          isChild ? "px-8 text-sm text-gray-500" : "px-4 text-sm font-medium text-gray-300"
         )}
       >
         {label}
@@ -282,10 +259,10 @@ function MobileNavDropdown({ label, children }: { label: string; children: React
     <div className="w-full">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-4 py-3 text-lg font-bold text-gray-300 uppercase hover:text-white hover:bg-white/5 border-l-2 border-transparent hover:border-red-500 transition-all"
+        className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all"
       >
         {label}
-        <ChevronDown size={20} className={cn("transition-transform duration-300", isOpen && "rotate-180")} />
+        <ChevronDown size={16} className={cn("transition-transform duration-200", isOpen && "rotate-180")} />
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -293,7 +270,7 @@ function MobileNavDropdown({ label, children }: { label: string; children: React
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden bg-white/5"
+            className="overflow-hidden"
           >
             {children}
           </motion.div>
@@ -302,5 +279,3 @@ function MobileNavDropdown({ label, children }: { label: string; children: React
     </div>
   )
 }
-
-

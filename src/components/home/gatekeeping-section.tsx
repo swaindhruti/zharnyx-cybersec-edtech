@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 export function GatekeepingSection() {
   return (
     <section id="gatekeeping" className="py-24 relative bg-black border-t-2 border-white/20">
-      <div className="container mx-auto px-4 max-w-5xl">
+      <div className="container mx-auto px-4 max-w-[1440px]">
         {/* Header */}
         <div className="text-center mb-20">
           <motion.h2

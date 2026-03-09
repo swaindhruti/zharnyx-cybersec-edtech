@@ -2,158 +2,91 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import { ArrowRight, Shield, Terminal, Crosshair } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-interface HeroSectionProps {
-  course?: {
-    months: any[];
-    level: string;
-    price: number | null;
-  };
-}
-
-export function HeroSection({ course }: HeroSectionProps) {
-  const duration = "6 MONTHS";
-  const level = course?.level === "All Levels" ? "3 LVL" : course?.level || "3 LVL"; // Just a heuristic mapping
-  const price = "₹4,999";
-
-
+export function HeroSection() {
   return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-36 pb-10">
-      {/* Background Grid Accent - subtle static noise or pattern could go here */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
+    <div className="relative min-h-screen  flex flex-col justify-center overflow-hidden bg-black pt-20 pb-16">
+      {/* Subtle grid overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none opacity-30" />
 
-      <main className="relative z-10 w-full max-w-7xl px-4 sm:px-6 flex flex-col items-center gap-8">
-        {/* Top Badge - Neo Brutalist */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 lg:px-16">
+        {/* Top Badge */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex items-center gap-3 px-4 py-1.5 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white]"
+          className="text-red-500 text-sm font-semibold uppercase tracking-[0.2em] mb-6"
         >
-          <Terminal size={14} strokeWidth={3} />
-          <span>Zharnyx 2.0 // Cyber-Agency</span>
-        </motion.div>
+          Tamil Nadu&apos;s Own Cybersecurity Academy
+        </motion.p>
 
-        {/* Hero Content */}
-        <div className="flex flex-col items-center text-center max-w-5xl space-y-6">
-          {/* Headline */}
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-white leading-[1.1] uppercase flex flex-col items-center">
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              From Student to
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-white to-red-500 animate-gradient-x"
-            >
-              Security Consultant
-            </motion.span>
-          </h1>
+        {/* Hero Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight mb-6 max-w-3xl"
+        >
+          India&apos;s First Track-Specialised,{" "}
+          <span className="text-red-500">Deployment-Ready</span> Cyber Academy
+        </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="text-sm sm:text-base md:text-xl text-gray-300 max-w-2xl font-medium border-l-4 border-red-600 pl-4 text-left md:text-center md:border-l-0 md:border-b-4 md:pb-2"
-          >
-            A 6-month career residency producing{" "}
-            <span className="bg-white text-black px-1">
-              Day-1-ready engineers
-            </span>{" "}
-            via live war games & SOC operations.
-          </motion.p>
+        {/* Subtext */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.35 }}
+          className="text-gray-400 text-base md:text-lg max-w-xl mb-10 leading-relaxed"
+        >
+          Choose your path. Master real tools. Get hired. 7 months from zero to
+          cybersecurity career — in Coimbatore, Chennai, or Remote.
+        </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="flex flex-wrap justify-center gap-4 text-xs font-bold uppercase tracking-widest text-red-500"
-          >
-            <span className="flex items-center gap-1">
-              <Crosshair size={12} /> Live Operations
-            </span>
-            <span className="text-gray-600">/</span>
-            <span className="flex items-center gap-1">
-              <Shield size={12} /> Client Deployments
-            </span>
-          </motion.div>
-
-          {/* Neo-Brutalist CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-6 mt-6 w-full justify-center"
-          >
-            <Link
-              href="/#master-plan"
-              className="group relative px-8 py-4 bg-red-600 text-black font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:translate-x-1 hover:translate-y-1 transition-transform"
-            >
-              <span className="absolute inset-0 bg-white translate-x-1.5 translate-y-1.5 -z-10 border-2 border-white group-hover:translate-x-0 group-hover:translate-y-0 transition-transform"></span>
-              <span className="flex items-center gap-2">
-                View Blueprint{" "}
-                <ArrowRight
-                  size={20}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
-              </span>
-            </Link>
-            <Link
-              href="/auth?mode=signup"
-              className="group px-8 py-4 bg-transparent text-white font-bold text-lg uppercase tracking-wider border-2 border-white hover:bg-white hover:text-black transition-colors"
-            >
-              Get Started
-            </Link>
-          </motion.div>
-        </div>
-
-        {/* Stats Grid - Neo Brutalist Box */}
+        {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.7 }}
-          className="grid grid-cols-2 lg:grid-cols-4 w-full border-2 border-white/20 mt-12 bg-black/50 backdrop-blur-sm divide-x-2 divide-y-2 lg:divide-y-0 divide-white/20"
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="flex flex-col sm:flex-row items-start gap-4 mb-16"
         >
-          <StatItem value={duration} label="Duration" />
-          <StatItem value={level} label="Deployment" />
-          <StatItem value="100%" label="Exposure" />
-          <StatItem value={price} label="Investment" />
+          <Link
+            href="/programs"
+            className="inline-flex items-center gap-2 px-7 py-3.5 bg-red-600 text-white font-semibold text-sm rounded-lg hover:bg-red-700 transition-colors shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-[0_0_28px_rgba(239,68,68,0.55)]"
+          >
+            Explore Programs <ArrowRight size={16} />
+          </Link>
+          <Link
+            href="/curriculum"
+            className="inline-flex items-center gap-2 px-7 py-3.5 bg-transparent text-white font-semibold text-sm border border-white/30 rounded-lg hover:bg-white/5 transition-colors"
+          >
+            View Curriculum
+          </Link>
         </motion.div>
-      </main>
-    </div>
-  );
-}
 
-// function OverflowText({ text, delay }: { text: string; delay: number }) {
-//   return (
-//     <span className="inline-block overflow-hidden align-bottom">
-//       <motion.span
-//         initial={{ y: "100%" }}
-//         animate={{ y: 0 }}
-//         transition={{ duration: 0.5, delay, ease: [0.33, 1, 0.68, 1] }}
-//         className="inline-block"
-//       >
-//         {text}
-//       </motion.span>
-//     </span>
-//   );
-// }
-
-function StatItem({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center p-6 hover:bg-white/5 transition-colors group">
-      <span className="text-3xl font-bold text-white group-hover:text-red-500 transition-colors">
-        {value}
-      </span>
-      <span className="text-xs font-bold text-gray-500 uppercase tracking-widest mt-1 group-hover:text-white transition-colors">
-        {label}
-      </span>
+        {/* Stats Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.65 }}
+          className="grid grid-cols-2 sm:grid-cols-4 gap-5 max-w-xl"
+        >
+          {[
+            { value: "7", label: "Months" },
+            { value: "4", label: "Tracks" },
+            { value: "28", label: "Weeks" },
+            { value: "100%", label: "Hands-On" },
+          ].map((stat, i) => (
+            <div
+              key={stat.label}
+              className="flex flex-col items-center justify-center py-5 px-8 border border-white/10 rounded-lg bg-white/5"
+            >
+              <span className="text-2xl font-bold text-red-500">{stat.value}</span>
+              <span className="text-xs text-gray-500 mt-1">{stat.label}</span>
+            </div>
+          ))}
+        </motion.div>
+      </div>
     </div>
   );
 }
