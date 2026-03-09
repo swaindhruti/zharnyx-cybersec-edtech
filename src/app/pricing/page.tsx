@@ -1,32 +1,23 @@
 import { PricingHero } from "@/components/pricing/hero-section";
-import { PricingCard } from "@/components/pricing/pricing-card";
-import { db } from "@/lib/db";
-import { course } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { PricingPackages } from "@/components/pricing/pricing-packages";
+import { StandaloneModules } from "@/components/pricing/standalone-modules";
+import { PricingFaq } from "@/components/pricing/pricing-faq";
+import { PricingCTA } from "@/components/pricing/cta-section";
 
-// Force dynamic rendering to ensure DB data is fresh
-export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Pricing - Zharnyx",
+  description: "Affordable By Design. All prices include 18% GST. No hidden fees.",
+};
 
-export default async function PricingPage() {
-  const courses = await db.query.course.findMany({
-    where: eq(course.status, "published"),
-    with: {
-      months: true,
-    },
-  });
-
+export default function PricingPage() {
   return (
-    <main className="min-h-screen bg-black">
-      <PricingHero />
-      <div className="flex flex-col gap-10 pb-20">
-        {courses.map((c) => (
-          <PricingCard key={c.id} course={c} />
-        ))}
-        {courses.length === 0 && (
-          <div className="text-center text-gray-500 py-20 uppercase font-mono tracking-widest">
-            No active courses available
-          </div>
-        )}
+    <main className="min-h-screen bg-black overflow-hidden selection:bg-red-500/30">
+      <div className="relative z-10">
+        <PricingHero />
+        <PricingPackages />
+        <StandaloneModules />
+        <PricingFaq />
+        <PricingCTA />
       </div>
     </main>
   );

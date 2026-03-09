@@ -1,44 +1,24 @@
 import { AnimatedBackground } from "@/components/shared/animated-background";
-import { getCurrentSession } from "@/lib/auth/role-guard";
-import { getEnrolledCourses } from "@/actions/student/dashboard";
-import { db } from "@/lib/db";
-import { course } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import { ProgramsList } from "../../components/programs/programs-list";
 import { ProgramsHero } from "@/components/programs/programs-hero";
+import { ProgramsPhases } from "@/components/programs/programs-phases";
+import { ProgramsTracks } from "@/components/programs/programs-tracks";
+import { ProgramsStandalone } from "@/components/programs/programs-standalone";
+import { ProgramsCTA } from "@/components/programs/programs-cta";
 
-export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Programs | Zharnyx Academy",
+  description: "Explore our comprehensive cybersecurity training programs and tracks.",
+};
 
-export default async function ProgramsPage() {
-  const session = await getCurrentSession();
-  // ...
-  let enrolledCourseIds: string[] = [];
-
-  if (session?.user?.id) {
-    const enrolledRes = await getEnrolledCourses(session.user.id);
-    if (enrolledRes.success && enrolledRes.data) {
-      enrolledCourseIds = enrolledRes.data.map(c => c.id);
-    }
-  }
-
-  const courses = await db.query.course.findMany({
-    where: eq(course.status, "published"),
-    with: {
-      months: {
-        with: {
-          weeks: true
-        }
-      },
-    },
-  });
-
+export default function ProgramsPage() {
   return (
     <>
-      <main className="relative z-10 min-h-screen bg-black">
+      <main className="relative z-10 min-h-screen bg-[#050505]">
         <ProgramsHero />
-        <div className="pb-20 px-4 md:px-8 container mx-auto max-w-[95%]">
-          <ProgramsList courses={courses} enrolledCourseIds={enrolledCourseIds} isLoggedIn={!!session} />
-        </div>
+        <ProgramsPhases />
+        <ProgramsTracks />
+        <ProgramsStandalone />
+        <ProgramsCTA />
       </main>
     </>
   );
