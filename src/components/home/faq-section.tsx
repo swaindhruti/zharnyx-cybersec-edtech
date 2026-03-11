@@ -76,7 +76,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export function FaqSection() {
   return (
-    <section className="py-[120px] bg-[#050505] font-sans">
+    <section id="faq" className="py-[120px] bg-[#050505] font-sans">
       <div className="container mx-auto px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-[64px]">
@@ -110,10 +110,10 @@ export function FaqSection() {
           {faqs.map((faq) => (
             <FaqItem key={faq.q} q={faq.q} a={faq.a} />
           ))}
-          
+
           <div className="mt-[40px] text-center">
-            <a 
-              href="/faq" 
+            <a
+              href="/faq"
               className="inline-flex items-center gap-2 text-[#d4d4d4] hover:text-[#f2f2f2] transition-colors text-[13px] font-medium group"
             >
               View All FAQs
