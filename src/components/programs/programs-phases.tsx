@@ -80,11 +80,12 @@ export function ProgramsPhases() {
           {phases.map((phase, i) => (
             <motion.div
               key={phase.title}
+              id={phase.title === "Foundation" ? "foundation-phase" : undefined}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="bg-[#0a0a0a] border border-[#262626] rounded-xl p-[32px] flex flex-col h-full hover:border-[#404040] transition-colors"
+              className="bg-[#0a0a0a] border border-[#262626] rounded-xl p-[32px] flex flex-col h-full hover:border-[#404040] transition-colors scroll-mt-[100px]"
             >
               <div className="mb-[24px]">
                 {phase.icon}

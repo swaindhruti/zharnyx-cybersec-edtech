@@ -1,23 +1,25 @@
-import { HeroSection } from "../../components/about/hero-section";
-import { MissionSection } from "../../components/about/mission-section";
-import { CorePillarsSection } from "../../components/about/core-pillars-section";
-import { LeadershipSection } from "../../components/about/leadership-section";
-import { JourneySection } from "../../components/about/journey-section";
-import { QuoteSection } from "../../components/about/quote-section";
+"use client";
+
+import { Navbar } from "@/components/shared/navbar";
+import { Footer } from "@/components/shared/footer";
+import { AboutHero } from "@/components/about/about-hero";
+import { AboutProblem } from "@/components/about/about-problem";
+import { AboutPillars } from "@/components/about/about-pillars";
+import { AboutFounders } from "@/components/about/about-founders";
+import { AboutCTA } from "@/components/about/about-cta";
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-black text-white relative">
-      {/* Global Background (Same as Curriculum) */}
-
+    <main className="min-h-screen bg-[#050505] selection:bg-[#ea384c]/30 selection:text-white">
+      <Navbar />
       <div className="relative z-10">
-        <HeroSection />
-        <MissionSection />
-        <CorePillarsSection />
-        <LeadershipSection />
-        <JourneySection />
-        <QuoteSection />
+        <AboutHero />
+        <AboutProblem />
+        <AboutPillars />
+        <AboutFounders />
+        <AboutCTA />
       </div>
+      <Footer />
     </main>
   );
 }

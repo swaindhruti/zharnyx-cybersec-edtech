@@ -29,7 +29,7 @@ export function Footer() {
               <p className="text-[#ea384c] text-[14px] font-semibold font-sans">
                 Tamil Nadu's Own Cybersecurity Academy
               </p>
-              
+
               <p className="text-[#a3a3a3] text-[14px] leading-relaxed max-w-[280px]">
                 Every Week. Every Skill. Every Student — Unregrettable.
               </p>
@@ -44,13 +44,20 @@ export function Footer() {
           <div>
             <h4 className="text-[#f2f2f2] font-semibold text-[15px] mb-6">Programs</h4>
             <ul className="space-y-4 text-[14px]">
-              {['Overview', 'Foundation Phase', 'SOC Analyst', 'VAPT', 'Cloud Security', 'DFIR'].map((item) => (
-                <li key={item}>
+              {[
+                { label: 'Overview', href: '/programs#overview' },
+                { label: 'Foundation Phase', href: '/foundation' },
+                { label: 'SOC Analyst', href: '/programs#soc-analyst' },
+                { label: 'VAPT', href: '/programs#vapt' },
+                { label: 'Cloud Security', href: '/programs#cloud-security' },
+                { label: 'DFIR', href: '/programs#dfir' }
+              ].map((item) => (
+                <li key={item.label}>
                   <Link
-                    href="#"
+                    href={item.href}
                     className="text-[#a3a3a3] hover:text-[#f2f2f2] transition-colors"
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -61,13 +68,19 @@ export function Footer() {
           <div>
             <h4 className="text-[#f2f2f2] font-semibold text-[15px] mb-6">Company</h4>
             <ul className="space-y-4 text-[14px]">
-              {['About Us', 'Placements', 'Blog', 'Full Curriculum', 'Capstone'].map((item) => (
-                <li key={item}>
+              {[
+                { label: 'About Us', href: '/about' },
+                { label: 'Placements', href: '/placement' },
+                { label: 'Blog', href: '/blog' },
+                { label: 'Full Curriculum', href: '/curriculum' },
+                { label: 'Capstone', href: '/capstone' }
+              ].map((item) => (
+                <li key={item.label}>
                   <Link
-                    href="#"
+                    href={item.href}
                     className="text-[#a3a3a3] hover:text-[#f2f2f2] transition-colors"
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -78,13 +91,19 @@ export function Footer() {
           <div>
             <h4 className="text-[#f2f2f2] font-semibold text-[15px] mb-6">Support</h4>
             <ul className="space-y-4 text-[14px]">
-              {['Contact / Enroll', 'FAQ', 'Pricing', 'Privacy Policy', 'Terms & Conditions'].map((item) => (
-                <li key={item}>
+              {[
+                { label: 'Contact / Enroll', href: '/auth?mode=signup' },
+                { label: 'FAQ', href: '/#faq' },
+                { label: 'Pricing', href: '/pricing' },
+                { label: 'Privacy Policy', href: '/privacy' },
+                { label: 'Terms & Conditions', href: '/terms' }
+              ].map((item) => (
+                <li key={item.label}>
                   <Link
-                    href="#"
+                    href={item.href}
                     className="text-[#a3a3a3] hover:text-[#f2f2f2] transition-colors"
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}

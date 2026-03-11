@@ -85,11 +85,16 @@ export function ProgramsTracks() {
           {tracks.map((track, i) => (
             <motion.div
               key={track.title}
+              id={
+                track.features[0].includes("SIEM") ? "soc-analyst" : 
+                track.features[0].includes("Web App") ? "vapt" : 
+                track.features[0].includes("AWS") ? "cloud-security" : "dfir"
+              }
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="bg-[#0a0a0a] border border-[#262626] rounded-xl p-[32px] flex flex-col hover:border-[#404040] transition-colors"
+              className="bg-[#0a0a0a] border border-[#262626] rounded-xl p-[32px] flex flex-col hover:border-[#404040] transition-colors scroll-mt-[100px]"
             >
               <div className="mb-[40px]">
                 {track.icon}
