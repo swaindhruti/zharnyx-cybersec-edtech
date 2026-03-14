@@ -1,122 +1,162 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, Variants } from "motion/react";
+import { ArrowRight, Star } from "lucide-react";
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 50, damping: 15 },
+  },
+};
+
+const breakdownRow = (label: string, value: string) => (
+  <div
+    key={label}
+    className="flex justify-between items-center py-3.5 border-b border-white/5 last:border-none"
+  >
+    <span className="text-gray-400 text-sm tracking-wide">{label}</span>
+    <span className="text-white text-sm font-semibold">{value}</span>
+  </div>
+);
 
 export function PricingPackages() {
   return (
-    <section className="py-[80px] px-4 md:px-8 bg-transparent relative z-10 font-sans">
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 relative">
-        {/* Glow behind cards */}
-        <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[600px] bg-red-500/5 blur-[120px] pointer-events-none rounded-full" />
+    <section className="relative w-full flex flex-col items-center py-24 bg-black overflow-hidden font-sans border-t border-white/5">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"
+      >
+        {/* Header */}
+        <div className="text-center mb-16 flex flex-col items-center">
+          <motion.p
+            variants={itemVariants}
+            className="text-red-500 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] mb-4"
+          >
+            FULL PACKAGES
+          </motion.p>
+          <motion.h2
+            variants={itemVariants}
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-[1.15] tracking-wide"
+          >
+            Choose Your <span className="text-red-500">Package</span>
+          </motion.h2>
+        </div>
 
-        {/* Student Package */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="bg-[#0a0a0a] border border-red-500/30 shadow-[0_0_60px_rgba(234,56,76,0.1)] rounded-[12px] p-[40px] flex flex-col relative overflow-hidden z-10"
+          variants={containerVariants}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
         >
-          <div className="mb-[32px]">
-            <span className="inline-block px-4 py-1.5 bg-red-500/10 text-red-500 rounded-full text-[12px] font-medium mb-[24px]">
-              Student Package
-            </span>
-            <div className="flex items-baseline gap-1 mt-[8px]">
-              <span className="text-[48px] font-bold text-[#f2f2f2] leading-none tracking-tight">₹47,137</span>
-            </div>
-            <p className="text-[12px] text-[#737373] mt-[8px]">Total incl. 18% GST</p>
-          </div>
+          {/* Student Package - Featured */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ y: -6 }}
+            className="group relative flex flex-col p-10 rounded-2xl bg-linear-to-b from-red-600/10 to-transparent border border-red-500/30 backdrop-blur-md overflow-hidden transition-all duration-500 hover:border-red-500/50 hover:shadow-2xl"
+          >
+            {/* Glow */}
+            <div className="absolute -inset-4 blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 bg-red-500/10 -z-10" />
 
-          <div className="flex flex-col flex-1 mb-[40px]">
-            <div className="flex justify-between items-center text-[13px] border-b border-[#262626] pb-[16px]">
-              <span className="text-[#a3a3a3]">Foundation (50% off)</span>
-              <span className="text-[#f2f2f2]">₹4,949</span>
+            <div className="flex items-center justify-between mb-8">
+              <span className="text-xs font-bold text-red-500 uppercase tracking-[0.15em] px-3 py-1.5 bg-red-500/10 rounded-full border border-red-500/20">
+                Student Package
+              </span>
+              <span className="flex items-center gap-1.5 text-xs text-red-400 font-semibold">
+                <Star size={12} fill="currentColor" />
+                50% off Foundation
+              </span>
             </div>
-            <div className="flex justify-between items-center text-[13px] border-b border-[#262626] py-[16px]">
-              <span className="text-[#a3a3a3]">Specialization Track</span>
-              <span className="text-[#f2f2f2]">₹25,999</span>
-            </div>
-            <div className="flex justify-between items-center text-[13px] border-b border-[#262626] py-[16px]">
-              <span className="text-[#a3a3a3]">Career Launch</span>
-              <span className="text-[#f2f2f2]">₹8,999</span>
-            </div>
-            
-            <div className="flex justify-between items-center text-[13px] border-b border-[#262626] py-[16px]">
-              <span className="text-[#a3a3a3]">Subtotal</span>
-              <span className="text-[#f2f2f2]">₹39,947</span>
-            </div>
-            <div className="flex justify-between items-center text-[13px] pt-[16px]">
-              <span className="text-[#a3a3a3]">GST (18%)</span>
-              <span className="text-[#f2f2f2]">₹7,190.46</span>
-            </div>
-          </div>
 
-          <div className="mt-auto">
-            <p className="text-[12px] text-red-500 font-medium mb-[16px]">
-              50% discount on Foundation Phase
-            </p>
-            <button className="w-full bg-red-500 hover:bg-[#d02e3f] text-white rounded-[6px] h-[48px] px-[32px] text-[14px] font-medium transition-colors shadow-[0_4px_14px_0_rgba(234,56,76,0.25)]">
+            <div className="mb-8">
+              <div className="flex items-baseline gap-2 mb-1">
+                <span className="text-5xl font-black text-transparent bg-clip-text bg-linear-to-b from-white to-gray-400 tracking-tight">
+                  ₹47,137
+                </span>
+              </div>
+              <p className="text-gray-500 text-xs tracking-wide uppercase">
+                Total incl. 18% GST
+              </p>
+            </div>
+
+            <div className="flex flex-col mb-10 grow rounded-xl overflow-hidden border border-white/5 bg-white/2 px-4">
+              {breakdownRow("Foundation (50% off)", "₹4,949")}
+              {breakdownRow("Specialization Track", "₹25,999")}
+              {breakdownRow("Career Launch", "₹8,999")}
+              {breakdownRow("Subtotal", "₹39,947")}
+              {breakdownRow("GST (18%)", "₹7,190.46")}
+            </div>
+
+            <a
+              href="/apply"
+              className="group/btn inline-flex items-center justify-center gap-2 w-full px-8 py-4 rounded-full bg-red-600 hover:bg-red-500 text-white font-semibold text-sm tracking-wide transition-all duration-300 shadow-[0_0_25px_rgba(239,68,68,0.35)] hover:shadow-[0_0_40px_rgba(239,68,68,0.55)]"
+            >
               Enroll as Student
-            </button>
-          </div>
-        </motion.div>
+              <ArrowRight
+                size={16}
+                className="group-hover/btn:translate-x-1 transition-transform"
+              />
+            </a>
+          </motion.div>
 
-        {/* Regular Package */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-[#0a0a0a] border border-[#1f1f1f] rounded-[12px] p-[40px] flex flex-col relative overflow-hidden z-10"
-        >
-          <div className="mb-[32px]">
-            <span className="inline-block px-4 py-1.5 bg-[#262626] text-[#a3a3a3] rounded-full text-[12px] font-medium mb-[24px]">
-              Regular Package
-            </span>
-            <div className="flex items-baseline gap-1 mt-[8px]">
-              <span className="text-[48px] font-bold text-[#f2f2f2] leading-none tracking-tight">₹52,978</span>
-            </div>
-            <p className="text-[12px] text-[#737373] mt-[8px]">Total incl. 18% GST</p>
-          </div>
+          {/* Regular Package */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ y: -6 }}
+            className="group relative flex flex-col p-10 rounded-2xl bg-linear-to-b from-white/5 to-transparent border border-white/5 backdrop-blur-md overflow-hidden transition-all duration-500 hover:border-white/15 hover:shadow-2xl"
+          >
+            <div className="absolute -inset-4 blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 bg-white/3 -z-10" />
 
-          <div className="flex flex-col flex-1 mb-[40px]">
-            <div className="flex justify-between items-center text-[13px] border-b border-[#262626] pb-[16px]">
-              <span className="text-[#a3a3a3]">Foundation</span>
-              <span className="text-[#f2f2f2]">₹9,899</span>
+            <div className="flex items-center justify-between mb-8">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.15em] px-3 py-1.5 bg-white/5 rounded-full border border-white/10">
+                Regular Package
+              </span>
             </div>
-            <div className="flex justify-between items-center text-[13px] border-b border-[#262626] py-[16px]">
-              <span className="text-[#a3a3a3]">Specialization Track</span>
-              <span className="text-[#f2f2f2]">₹25,999</span>
-            </div>
-            <div className="flex justify-between items-center text-[13px] border-b border-[#262626] py-[16px]">
-              <span className="text-[#a3a3a3]">Career Launch</span>
-              <span className="text-[#f2f2f2]">₹8,999</span>
-            </div>
-            
-            <div className="flex justify-between items-center text-[13px] border-b border-[#262626] py-[16px]">
-              <span className="text-[#a3a3a3]">Subtotal</span>
-              <span className="text-[#f2f2f2]">₹44,897</span>
-            </div>
-            <div className="flex justify-between items-center text-[13px] pt-[16px]">
-              <span className="text-[#a3a3a3]">GST (18%)</span>
-              <span className="text-[#f2f2f2]">₹8,081.46</span>
-            </div>
-          </div>
 
-          <div className="mt-auto">
-            <p className="text-[12px] text-transparent select-none mb-[16px]">
-              &nbsp;
-            </p>
-            <button className="w-full bg-transparent border border-[#333] hover:bg-[#1a1a1a] text-[#f2f2f2] rounded-[6px] h-[48px] px-[32px] text-[14px] font-medium transition-colors">
+            <div className="mb-8">
+              <div className="flex items-baseline gap-2 mb-1">
+                <span className="text-5xl font-black text-transparent bg-clip-text bg-linear-to-b from-white to-gray-400 tracking-tight">
+                  ₹52,978
+                </span>
+              </div>
+              <p className="text-gray-500 text-xs tracking-wide uppercase">
+                Total incl. 18% GST
+              </p>
+            </div>
+
+            <div className="flex flex-col mb-10 grow rounded-xl overflow-hidden border border-white/5 bg-white/2 px-4">
+              {breakdownRow("Foundation", "₹9,899")}
+              {breakdownRow("Specialization Track", "₹25,999")}
+              {breakdownRow("Career Launch", "₹8,999")}
+              {breakdownRow("Subtotal", "₹44,897")}
+              {breakdownRow("GST (18%)", "₹8,081.46")}
+            </div>
+
+            <a
+              href="/apply"
+              className="inline-flex items-center justify-center gap-2 w-full px-8 py-4 rounded-full bg-white/5 border border-white/10 hover:border-white/25 hover:bg-white/10 text-white font-semibold text-sm tracking-wide backdrop-blur-sm transition-all duration-300"
+            >
               Enroll Now
-            </button>
-          </div>
+            </a>
+          </motion.div>
         </motion.div>
-      </div>
 
-      <div className="text-center mt-[40px] text-[12px] text-[#737373]">
-        <p>EMI options available on request · Institutional / college batch pricing on request</p>
-      </div>
+        <motion.p
+          variants={itemVariants}
+          className="text-center mt-8 text-xs text-gray-500 tracking-wide"
+        >
+          EMI options available on request · Institutional / college batch
+          pricing on request
+        </motion.p>
+      </motion.div>
     </section>
   );
 }

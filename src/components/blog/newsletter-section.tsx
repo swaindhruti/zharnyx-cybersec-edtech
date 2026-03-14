@@ -1,52 +1,134 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, Variants } from "motion/react";
+import { useState } from "react";
+import { ArrowRight, Send } from "lucide-react";
+import Link from "next/link";
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2 },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 50, damping: 15 },
+  },
+};
 
 export function NewsletterSection() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
   return (
-    <section className="bg-[#050505] font-sans py-[120px] px-6 border-t border-[#1a1a1a]">
-      <div className="container mx-auto max-w-[800px] text-center">
+    <section className="relative w-full flex flex-col items-center py-32 bg-black overflow-hidden font-sans border-t border-white/5">
+      {/* Ambient background glow — same as AboutCTASection */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-red-600/10 blur-[120px] rounded-full" />
+      </div>
+
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center"
+      >
+        {/* Badge */}
+        <motion.p
+          variants={itemVariants}
+          className="text-red-500 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-6"
+        >
+          Stay in the Loop
+        </motion.p>
+
+        {/* Heading */}
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-[32px] md:text-[40px] font-bold text-[#f2f2f2] tracking-tight mb-[16px]"
+          variants={itemVariants}
+          className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-[1.15] tracking-wide mb-6 max-w-3xl"
         >
           Weekly Tamil Nadu <span className="text-red-500">Cyber Insights</span>
         </motion.h2>
-        
+
+        {/* Subtext */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="text-[#a3a3a3] text-[16px] md:text-[18px] mb-[48px]"
+          variants={itemVariants}
+          className="text-gray-400 text-base sm:text-lg md:text-xl max-w-xl leading-relaxed tracking-wide mb-12"
         >
-          Get career guides, tool tutorials, and job market updates in your inbox.
+          Get career guides, tool tutorials, and job market updates delivered to
+          your inbox every week.
         </motion.p>
 
-        <motion.form
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-col sm:flex-row justify-center max-w-[500px] mx-auto gap-[12px]"
-          onSubmit={(e) => e.preventDefault()}
+        {/* Form / Success */}
+        <motion.div variants={itemVariants} className="w-full max-w-lg">
+          {submitted ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: "spring", stiffness: 60, damping: 15 }}
+              className="flex flex-col items-center gap-4 px-10 py-8 rounded-2xl border border-red-500/20 bg-red-500/5"
+            >
+              <span className="text-4xl">🎉</span>
+              <p className="text-white font-bold text-lg tracking-wide">
+                You&apos;re in!
+              </p>
+              <p className="text-gray-400 text-sm tracking-wide">
+                First issue lands in your inbox next week.
+              </p>
+              <Link
+                href="/blog"
+                className="group inline-flex items-center gap-2 text-red-500 text-sm font-semibold tracking-wide hover:text-red-400 transition-colors"
+              >
+                Browse articles
+                <ArrowRight
+                  size={14}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </Link>
+            </motion.div>
+          ) : (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (email) setSubmitted(true);
+              }}
+              className="flex flex-col sm:flex-row gap-3"
+            >
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                required
+                className="grow px-6 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-white placeholder:text-gray-600 text-sm tracking-wide focus:outline-none focus:border-red-500/50 focus:bg-red-500/5 transition-all duration-300"
+              />
+              <button
+                type="submit"
+                className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-red-600 hover:bg-red-500 text-white font-semibold text-sm tracking-wide transition-all duration-300 shadow-[0_0_30px_rgba(239,68,68,0.35)] hover:shadow-[0_0_45px_rgba(239,68,68,0.55)] shrink-0"
+              >
+                Subscribe
+                <Send
+                  size={15}
+                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                />
+              </button>
+            </form>
+          )}
+        </motion.div>
+
+        <motion.p
+          variants={itemVariants}
+          className="mt-6 text-xs text-gray-600 tracking-wide"
         >
-          <input 
-            type="email" 
-            placeholder="your@email.com" 
-            className="flex-1 bg-[#0a0a0a] border border-[#262626] rounded-md px-[16px] py-[12px] text-[#f2f2f2] text-[15px] placeholder:text-[#525252] focus:outline-none focus:border-red-500 transition-colors"
-            required
-          />
-          <button 
-            type="submit"
-            className="bg-red-500 hover:bg-[#d92d3f] text-white px-[24px] py-[12px] rounded-md font-medium text-[15px] transition-all shadow-[0_0_20px_rgba(234,56,76,0.3)] hover:shadow-[0_0_25px_rgba(234,56,76,0.4)] whitespace-nowrap"
-          >
-            Subscribe
-          </button>
-        </motion.form>
-      </div>
+          No spam. Unsubscribe anytime.
+        </motion.p>
+      </motion.div>
     </section>
   );
 }

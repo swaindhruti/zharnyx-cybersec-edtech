@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { CourseViewShell } from "@/components/student/course-view/course-view-shell";
-import { AnimatedBackground } from "@/components/shared/animated-background";
+// import { AnimatedBackground } from "@/components/shared/animated-background";
 
 interface CoursePageProps {
   params: Promise<{
@@ -27,7 +27,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
   const enrollmentRecord = await db.query.enrollment.findFirst({
     where: and(
       eq(enrollment.studentId, session.user.id),
-      eq(enrollment.courseId, courseId)
+      eq(enrollment.courseId, courseId),
     ),
   });
 
@@ -67,7 +67,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
   return (
     <>
-      <AnimatedBackground />
+      {/* <AnimatedBackground /> */}
       <div className="relative flex min-h-screen pointer-events-none">
         <main className="w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 pointer-events-auto py-8">
           <CourseViewShell course={courseData} />

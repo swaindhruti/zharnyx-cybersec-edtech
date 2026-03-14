@@ -5,6 +5,13 @@ import { useState } from "react";
 import { ChevronDown, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.55, ease: "easeOut" as const, delay },
+});
+
 const faqs = [
   {
     q: "Who can enroll?",
@@ -36,90 +43,102 @@ const faqs = [
   },
 ];
 
-function FaqItem({ q, a }: { q: string; a: string }) {
+function FaqItem({ q, a, delay }: { q: string; a: string; delay: number }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-[#262626]">
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between py-[16px] text-left group"
-      >
-        <span className="text-[#f2f2f2] font-medium text-[14px] group-hover:text-red-500 transition-colors">
-          {q}
-        </span>
-        <ChevronDown
-          size={16}
-          className={cn(
-            "text-[#a3a3a3] flex-shrink-0 ml-4 transition-transform duration-200",
-            open && "rotate-180"
-          )}
-        />
-      </button>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <p className="text-[#a3a3a3] text-[14px] leading-relaxed pb-[16px]">
-              {a}
-            </p>
-          </motion.div>
+    <motion.div {...fadeUp(delay)}>
+      <div
+        className={cn(
+          "rounded-2xl border backdrop-blur-md transition-all duration-300 overflow-hidden",
+          open
+            ? "border-red-500/25 bg-linear-to-b from-red-500/5 to-transparent"
+            : "border-white/5 bg-white/2 hover:border-white/8",
         )}
-      </AnimatePresence>
-    </div>
+      >
+        <button
+          onClick={() => setOpen(!open)}
+          className="w-full flex items-center justify-between p-6 text-left group"
+        >
+          <span
+            className={cn(
+              "font-semibold text-sm sm:text-base tracking-wide transition-colors",
+              open ? "text-white" : "text-gray-300 group-hover:text-white",
+            )}
+          >
+            {q}
+          </span>
+          <ChevronDown
+            size={18}
+            className={cn(
+              "shrink-0 ml-4 transition-transform duration-300",
+              open ? "rotate-180 text-red-500" : "text-gray-600",
+            )}
+          />
+        </button>
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.28, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <p className="text-gray-500 text-sm sm:text-base leading-relaxed px-6 pb-6 tracking-wide">
+                {a}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
   );
 }
 
 export function FaqSection() {
   return (
-    <section id="faq" className="py-[120px] bg-[#050505] font-sans">
-      <div className="container mx-auto px-6 lg:px-8">
+    <section className="relative w-full py-24 bg-black border-t border-white/5 overflow-hidden font-sans">
+      <div className="container mx-auto max-w-7xl px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-[64px]">
+        <div className="mb-14 flex flex-col items-center text-center">
           <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-red-500 text-[12px] font-semibold uppercase tracking-[0.15em] mb-[16px]"
+            {...fadeUp(0)}
+            className="text-red-500 text-xs font-semibold uppercase tracking-[0.25em] mb-4"
           >
             FAQ
           </motion.p>
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-[36px] md:text-[44px] font-bold text-[#f2f2f2] tracking-tight"
+            {...fadeUp(0.08)}
+            className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-white leading-[1.1] tracking-wide mb-4"
           >
             Frequently Asked <span className="text-red-500">Questions</span>
           </motion.h2>
+          <motion.p
+            {...fadeUp(0.14)}
+            className="text-gray-500 text-base sm:text-lg leading-relaxed tracking-wide max-w-xl"
+          >
+            Everything you need to know before you apply.
+          </motion.p>
         </div>
 
-        {/* Accordion List */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.15 }}
-          className="max-w-[800px] mx-auto"
-        >
-          {faqs.map((faq) => (
-            <FaqItem key={faq.q} q={faq.q} a={faq.a} />
+        {/* Two-column FAQ grid on large screens */}
+        <div className="grid lg:grid-cols-2 gap-4 mb-10">
+          {faqs.map((faq, i) => (
+            <FaqItem key={faq.q} q={faq.q} a={faq.a} delay={0.04 * i} />
           ))}
+        </div>
 
-          <div className="mt-[40px] text-center">
-            <a
-              href="/faq"
-              className="inline-flex items-center gap-2 text-[#d4d4d4] hover:text-[#f2f2f2] transition-colors text-[13px] font-medium group"
-            >
-              View All FAQs
-              <ArrowRight className="w-[14px] h-[14px] group-hover:translate-x-1 transition-transform" />
-            </a>
-          </div>
+        <motion.div {...fadeUp(0.4)} className="flex justify-center">
+          <a
+            href="/faq"
+            className="inline-flex items-center gap-2 text-gray-500 hover:text-white transition-colors text-sm font-semibold tracking-wide group"
+          >
+            View All FAQs
+            <ArrowRight
+              size={14}
+              className="group-hover:translate-x-1 transition-transform"
+            />
+          </a>
         </motion.div>
       </div>
     </section>

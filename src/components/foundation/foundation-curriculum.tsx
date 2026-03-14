@@ -87,7 +87,8 @@ const curriculumBlocks = [
         id: "week-10",
         label: "Week 10",
         title: "Python for Security",
-        description: "Scripting basics, requests library, building basic scanners",
+        description:
+          "Scripting basics, requests library, building basic scanners",
         tools: "Python 3, Scapy",
       },
       {
@@ -101,7 +102,8 @@ const curriculumBlocks = [
         id: "week-12",
         label: "Week 12",
         title: "Foundation Capstone — 48-Hour Security Audit",
-        description: "Full audit: scanning, analysis, report writing, presentation",
+        description:
+          "Full audit: scanning, analysis, report writing, presentation",
         tools: "All foundation tools",
       },
     ],
@@ -140,12 +142,14 @@ export function FoundationCurriculum() {
                     <h3 className="text-[18px] font-bold text-[#f2f2f2] mb-[12px]">
                       {week.title}
                     </h3>
-                    <p className="text-[#a3a3a3] text-[14px] leading-relaxed mb-[24px] flex-grow">
+                    <p className="text-[#a3a3a3] text-[14px] leading-relaxed mb-[24px] grow">
                       {week.description}
                     </p>
                     <div className="mt-auto">
                       <span className="text-red-500 text-[13px]">Tools: </span>
-                      <span className="text-[#737373] text-[13px]">{week.tools}</span>
+                      <span className="text-[#737373] text-[13px]">
+                        {week.tools}
+                      </span>
                     </div>
                   </motion.div>
                 ))}

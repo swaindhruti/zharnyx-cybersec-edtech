@@ -1,47 +1,57 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, Variants } from "motion/react";
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 50, damping: 15 },
+  },
+};
 
 export function CurriculumHero() {
   return (
-    <section className="relative overflow-hidden bg-[#000000] font-sans pt-[160px] pb-[80px] px-6 border-b border-[#1a1a1a]">
-      {/* Background Glows and Grid */}
-      {/* <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-500 opacity-[0.05] blur-[120px] pointer-events-none" />
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.1]"
-        style={{
-          backgroundImage: 'linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)',
-          backgroundSize: '80px 80px',
-        }}
-      /> */}
+    <section className="relative min-h-screen w-full flex flex-col items-center justify-center text-center overflow-hidden bg-black font-sans px-4 pt-24 pb-20 border-b border-white/5">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-red-600/10 blur-[140px] rounded-full" />
+      </div>
 
-      <div className="container mx-auto max-w-[1280px] relative z-10 flex flex-col items-center px-4 md:px-8 text-center mt-[40px]">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 max-w-4xl mx-auto flex flex-col items-center"
+      >
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-red-500 text-[11px] md:text-[13px] font-mono tracking-[0.15em] mb-[24px] uppercase"
+          variants={itemVariants}
+          className="text-red-500 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-6"
         >
           FULL CURRICULUM
         </motion.p>
 
         <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-[30px] md:text-[40px] lg:text-[54px] font-bold text-[#ffffff] leading-[1.1] tracking-tight mb-[24px]"
+          variants={itemVariants}
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.15] tracking-wide mb-6"
         >
           28 Weeks. <span className="text-red-500">Every Detail.</span>
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-[#a3a3a3] text-[12px] md:text-[16px] max-w-[700px] leading-relaxed mb-[40px]"
+          variants={itemVariants}
+          className="text-gray-400 text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed tracking-wide"
         >
-          Filter by phase or track. Every week shows objectives, tools, and deliverables.
+          Filter by phase or track. Every week shows objectives, tools, and
+          deliverables.
         </motion.p>
-      </div>
+      </motion.div>
     </section>
   );
 }

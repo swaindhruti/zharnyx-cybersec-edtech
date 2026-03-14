@@ -1,82 +1,114 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, Variants } from "motion/react";
+import { Target, Eye } from "lucide-react";
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.18 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 50, damping: 15 },
+  },
+};
 
 export function AboutHero() {
   return (
-    <section id="mission" className="relative overflow-hidden bg-[#050505] font-sans pt-[160px] pb-[80px] lg:pt-[240px] lg:pb-[140px] px-6">
-      {/* Background Grid Pattern matching Lovable site */}
-      {/* <div 
-        className="absolute inset-x-0 top-0 h-[600px] pointer-events-none opacity-[0.15]" 
-        style={{
-          backgroundImage: 'linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-          maskImage: 'linear-gradient(to bottom, black 20%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 20%, transparent 100%)'
-        }}
-      /> */}
+    <section
+      id="mission"
+      className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-black font-sans px-4 pt-24 pb-20 border-b border-white/5"
+    >
+      {/* Ambient glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute left-1/4 top-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-red-600/8 blur-[150px] rounded-full" />
+        <div className="absolute right-1/4 top-1/3 w-[400px] h-[300px] bg-white/2 blur-[120px] rounded-full" />
+      </div>
 
-      {/* Grid fade at bottom */}
-      <div className="absolute inset-x-0 bottom-0 h-[400px] bg-gradient-to-t from-[#050505] to-transparent pointer-events-none" />
-
-      <div className="container mx-auto max-w-[1280px] relative z-10">
-        <div className="max-w-[1000px] mb-[120px]">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 w-full max-w-7xl mx-auto"
+      >
+        {/* Header text */}
+        <div className="mb-20">
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-red-500 text-[11px] md:text-[13px] font-semibold uppercase tracking-[0.15em] mb-[24px]"
+            variants={itemVariants}
+            className="text-red-500 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] mb-6"
           >
             ABOUT US
           </motion.p>
-
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-[30px] md:text-[40px] lg:text-[54px] font-bold text-[#f2f2f2] leading-[1.1] tracking-tight mb-[32px]"
+            variants={itemVariants}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-wide mb-8 max-w-5xl"
           >
-            Tamil Nadu's Own <span className="text-red-500">Cybersecurity Academy</span>
+            Tamil Nadu&apos;s Own{" "}
+            <span className="text-red-500">Cybersecurity Academy.</span>
           </motion.h1>
-
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-[#a3a3a3] text-[16px] md:text-[20px] max-w-[800px] leading-relaxed"
+            variants={itemVariants}
+            className="text-gray-400 text-base sm:text-lg md:text-xl max-w-3xl leading-relaxed tracking-wide"
           >
-            Making Tamil Nadu's students job-ready in cybersecurity — one cohort at a time.
+            Making Tamil Nadu&apos;s students job-ready in cybersecurity — one
+            cohort at a time.
           </motion.p>
         </div>
 
         {/* Mission & Vision Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {/* Mission Card */}
+        <motion.div
+          variants={containerVariants}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          {/* Mission */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-[48px] lg:p-[64px]"
+            variants={itemVariants}
+            whileHover={{ y: -5 }}
+            className="group relative flex flex-col gap-6 p-10 rounded-2xl bg-linear-to-b from-red-600/8 to-transparent border border-red-500/20 backdrop-blur-md overflow-hidden transition-all duration-500 hover:border-red-500/40"
           >
-            <h2 className="text-red-500 text-[20px] lg:text-[26px] font-bold mb-[24px]">Mission</h2>
-            <p className="text-[#a3a3a3] text-[14px] lg:text-[16px] leading-[1.8]">
-              Make Tamil Nadu's students job-ready in cybersecurity through hands-on, track-specialised training that produces Day-1 deployable graduates — not just certificate holders.
-            </p>
+            <div className="absolute -inset-4 blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 bg-red-500/8 -z-10" />
+            <div className="p-3 w-fit rounded-full bg-red-500/10 text-red-500">
+              <Target className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-extrabold text-white tracking-wide mb-4">
+                Mission
+              </h2>
+              <p className="text-gray-400 text-sm sm:text-base leading-relaxed tracking-wide">
+                Make Tamil Nadu&apos;s students job-ready in cybersecurity
+                through hands-on, track-specialised training that produces Day-1
+                deployable graduates — not just certificate holders.
+              </p>
+            </div>
           </motion.div>
 
-          {/* Vision Card */}
+          {/* Vision */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-[48px] lg:p-[64px]"
+            variants={itemVariants}
+            whileHover={{ y: -5 }}
+            className="group relative flex flex-col gap-6 p-10 rounded-2xl bg-linear-to-b from-white/5 to-transparent border border-white/5 backdrop-blur-md overflow-hidden transition-all duration-500 hover:border-white/15"
           >
-            <h2 className="text-red-500 text-[20px] lg:text-[26px] font-bold mb-[24px]">Vision</h2>
-            <p className="text-[#a3a3a3] text-[14px] lg:text-[16px] leading-[1.8]">
-              Every Zharnyx graduate walks into their first cybersecurity role with a portfolio of real deliverables, hands-on lab experience, and the confidence to perform from Day 1.
-            </p>
+            <div className="absolute -inset-4 blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 bg-white/3 -z-10" />
+            <div className="p-3 w-fit rounded-full bg-white/8 text-white">
+              <Eye className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-extrabold text-white tracking-wide mb-4">
+                Vision
+              </h2>
+              <p className="text-gray-400 text-sm sm:text-base leading-relaxed tracking-wide">
+                Every Zharnyx graduate walks into their first cybersecurity role
+                with a portfolio of real deliverables, hands-on lab experience,
+                and the confidence to perform from Day 1.
+              </p>
+            </div>
           </motion.div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

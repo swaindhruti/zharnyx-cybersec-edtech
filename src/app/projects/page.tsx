@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatedBackground } from "@/components/shared/animated-background";
+// import { AnimatedBackground } from "@/components/shared/animated-background";
 import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
 import { motion } from "motion/react";
@@ -33,7 +33,7 @@ export default function ProjectsPage() {
 
   return (
     <>
-      <AnimatedBackground />
+      {/* <AnimatedBackground /> */}
       <Navbar />
 
       <main className="relative z-10 min-h-screen pt-32 pb-20 px-4 md:px-8 container mx-auto">

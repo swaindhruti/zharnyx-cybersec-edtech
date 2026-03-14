@@ -1,60 +1,84 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, Variants } from "motion/react";
 import { ArrowRight } from "lucide-react";
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2 },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 50, damping: 15 },
+  },
+};
 
 export function ProgramsCTA() {
   return (
-    <section className="py-[120px] bg-[#050505] font-sans px-4 relative overflow-hidden">
-      
-      {/* Background Decorators */}
-      <div className="absolute inset-0 flex justify-center items-center pointer-events-none opacity-30">
-        <div className="w-[800px] h-[400px] bg-red-500 rounded-full blur-[150px] opacity-10" />
+    <section className="relative w-full flex flex-col items-center py-32 bg-black overflow-hidden font-sans border-t border-white/5">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-red-600/10 blur-[120px] rounded-full" />
       </div>
 
-      <div className="container mx-auto max-w-[800px] relative z-10 text-center">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center"
+      >
+        <motion.p
+          variants={itemVariants}
+          className="text-red-500 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-6"
+        >
+          LIMITED SEATS PER COHORT
+        </motion.p>
+
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-[40px] md:text-[56px] font-bold text-[#f2f2f2] tracking-tight mb-[24px]"
+          variants={itemVariants}
+          className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-[1.15] tracking-wide mb-6 max-w-3xl"
         >
           Ready to <span className="text-red-500">Choose Your Track?</span>
         </motion.h2>
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="text-[#a3a3a3] text-[18px] mb-[48px]"
+          variants={itemVariants}
+          className="text-gray-400 text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed tracking-wide mb-12"
         >
-          Enrollment slots are limited per cohort. Apply now to secure your spot.
+          Enrollment slots are limited per cohort. Apply now to secure your spot
+          in the next batch.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          variants={itemVariants}
+          className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <a
             href="/enroll"
-            className="flex items-center justify-center gap-2 w-full sm:w-auto px-[32px] py-[16px] text-[15px] font-bold text-white bg-red-500 rounded-md hover:bg-red-600 transition-colors shadow-[0_0_20px_rgba(234,56,76,0.4)] group"
+            className="group inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-red-600 text-white font-semibold text-base tracking-wide hover:bg-red-500 transition-all duration-300 shadow-[0_0_30px_rgba(239,68,68,0.35)] hover:shadow-[0_0_45px_rgba(239,68,68,0.55)]"
           >
             Enroll Now
-            <ArrowRight className="w-[18px] h-[18px] group-hover:translate-x-1 transition-transform" />
+            <ArrowRight
+              size={18}
+              className="group-hover:translate-x-1 transition-transform"
+            />
           </a>
-          
           <a
             href="/curriculum"
-            className="flex items-center justify-center gap-2 w-full sm:w-auto px-[32px] py-[16px] text-[15px] font-medium text-[#f2f2f2] bg-transparent border border-[#333333] rounded-md hover:bg-[#1a1a1a] transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-white/5 text-white font-semibold text-base tracking-wide border border-white/10 hover:border-white/25 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
           >
             Full Curriculum
           </a>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

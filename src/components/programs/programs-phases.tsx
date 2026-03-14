@@ -1,32 +1,28 @@
 "use client";
 
-import { motion } from "motion/react";
-import { BookOpen, Shield, Briefcase, ArrowRight } from "lucide-react";
+import { motion, Variants } from "motion/react";
+import { BookOpen, Shield, Briefcase, Check, ArrowRight } from "lucide-react";
 
-// Custom Check Icon to match the design (a circle with a check inside, not filled)
-function CustomCheckIcon({ className }: { className?: string }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width="16" 
-      height="16" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <circle cx="12" cy="12" r="10"></circle>
-      <path d="m9 12 2 2 4-4"></path>
-    </svg>
-  );
-}
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 50, damping: 15 },
+  },
+};
 
 const phases = [
   {
-    icon: <BookOpen className="w-[32px] h-[32px] text-red-500" />,
+    icon: <BookOpen className="w-7 h-7" />,
     phase: "Phase 1",
     duration: "3 Months",
     weeks: "Weeks 1-12",
@@ -41,7 +37,7 @@ const phases = [
     ],
   },
   {
-    icon: <Shield className="w-[32px] h-[32px] text-red-500" />,
+    icon: <Shield className="w-7 h-7" />,
     phase: "Phase 2",
     duration: "3 Months",
     weeks: "Weeks 13-24",
@@ -56,7 +52,7 @@ const phases = [
     ],
   },
   {
-    icon: <Briefcase className="w-[32px] h-[32px] text-red-500" />,
+    icon: <Briefcase className="w-7 h-7" />,
     phase: "Phase 3",
     duration: "1 Month",
     weeks: "Weeks 25-28",
@@ -74,54 +70,88 @@ const phases = [
 
 export function ProgramsPhases() {
   return (
-    <section className="py-[120px] bg-[#050505] font-sans px-4">
-      <div className="container mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {phases.map((phase, i) => (
+    <section className="relative w-full flex flex-col items-center py-24 bg-black overflow-hidden font-sans border-t border-white/5">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      >
+        {/* Header */}
+        <div className="text-center mb-16 flex flex-col items-center">
+          <motion.p
+            variants={itemVariants}
+            className="text-red-500 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-4"
+          >
+            PROGRAM STRUCTURE
+          </motion.p>
+          <motion.h2
+            variants={itemVariants}
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-[1.15] tracking-wide"
+          >
+            3 Phases. <span className="text-red-500">One Residency.</span>
+          </motion.h2>
+        </div>
+
+        {/* Phase Cards */}
+        <motion.div
+          variants={containerVariants}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
+          {phases.map((phase) => (
             <motion.div
               key={phase.title}
-              id={phase.title === "Foundation" ? "foundation-phase" : undefined}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-[#0a0a0a] border border-[#262626] rounded-xl p-[32px] flex flex-col h-full hover:border-[#404040] transition-colors scroll-mt-[100px]"
+              variants={itemVariants}
+              whileHover={{ y: -6 }}
+              className="group relative flex flex-col p-8 rounded-2xl bg-linear-to-b from-white/5 to-transparent border border-white/5 backdrop-blur-md overflow-hidden transition-all duration-500 hover:border-red-500/30 hover:shadow-2xl"
             >
-              <div className="mb-[24px]">
-                {phase.icon}
+              {/* Hover glow */}
+              <div className="absolute -inset-4 blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 bg-red-500/5 -z-10" />
+
+              <div className="flex items-start justify-between mb-6">
+                <div className="p-3 rounded-full bg-red-500/10 text-red-500">
+                  {phase.icon}
+                </div>
+                <span className="text-xs font-semibold text-red-500 uppercase tracking-widest px-3 py-1 bg-red-500/10 rounded-full border border-red-500/20">
+                  {phase.duration}
+                </span>
               </div>
-              
-              <div className="text-red-500 text-[10px] font-mono mb-[12px] uppercase tracking-wider">
-                {phase.phase} · {phase.duration} · {phase.weeks}
-              </div>
-              
-              <h3 className="text-[24px] font-bold text-[#f2f2f2] mb-[16px]">
+
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-2">
+                {phase.phase} · {phase.weeks}
+              </p>
+              <h3 className="text-2xl font-bold text-white tracking-wide mb-3">
                 {phase.title}
               </h3>
-              
-              <p className="text-[#a3a3a3] text-[14px] leading-relaxed mb-[32px] min-h-[72px]">
+              <p className="text-gray-400 text-sm leading-relaxed mb-8 grow">
                 {phase.description}
               </p>
-              
-              <div className="space-y-[16px] mb-[40px] flex-grow">
-                {phase.features.map((feature, j) => (
-                  <div key={j} className="flex items-start gap-3">
-                    <CustomCheckIcon className="w-[16px] h-[16px] text-red-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-[#a3a3a3] text-[13px]">
+
+              <ul className="flex flex-col gap-3 mb-8">
+                {phase.features.map((feature) => (
+                  <li key={feature} className="flex items-center gap-3">
+                    <span className="shrink-0 p-1 rounded-full bg-red-500/10 text-red-500">
+                      <Check size={12} strokeWidth={3} />
+                    </span>
+                    <span className="text-gray-400 text-sm tracking-wide">
                       {feature}
                     </span>
-                  </div>
+                  </li>
                 ))}
-              </div>
-              
-              <button className="flex items-center justify-between w-full px-[16px] py-[12px] text-[14px] font-medium text-[#f2f2f2] bg-transparent border border-[#262626] rounded-md hover:bg-[#1a1a1a] transition-colors mt-auto group">
+              </ul>
+
+              <button className="group/btn inline-flex items-center gap-2 text-sm font-semibold text-gray-300 hover:text-white transition-colors mt-auto">
                 Learn More
-                <ArrowRight className="w-[16px] h-[16px] group-hover:translate-x-1 transition-transform" />
+                <ArrowRight
+                  size={16}
+                  className="group-hover/btn:translate-x-1 transition-transform"
+                />
               </button>
             </motion.div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

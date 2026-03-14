@@ -2,23 +2,32 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentSession } from "@/lib/auth/role-guard";
 import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
-import {
   Shield,
   GraduationCap,
   Users,
   Briefcase,
-  Terminal,
-  User,
+  ArrowRight,
   Mail,
-  Fingerprint,
+  UserCircle2,
+  Handshake,
 } from "lucide-react";
 import { HubUserControls } from "@/components/dashboard/hub/user-controls";
+
+const roleColor: Record<string, string> = {
+  admin: "text-red-500   bg-red-500/10   border-red-500/25",
+  mentor: "text-purple-400 bg-purple-500/10 border-purple-500/25",
+  student: "text-blue-400   bg-blue-500/10   border-blue-500/25",
+  recruiter: "text-yellow-400 bg-yellow-500/10 border-yellow-500/25",
+  partner_agency: "text-green-400  bg-green-500/10  border-green-500/25",
+};
+
+const roleLabel: Record<string, string> = {
+  admin: "Admin",
+  mentor: "Mentor",
+  student: "Student",
+  recruiter: "Recruiter",
+  partner_agency: "Partner Agency",
+};
 
 export default async function DashboardPage() {
   const session = await getCurrentSession();
@@ -30,222 +39,212 @@ export default async function DashboardPage() {
   const userRole = session.user.role;
   const userName = session.user.name;
   const userEmail = session.user.email;
-  const userId = session.user.id;
+  const rolePill =
+    roleColor[userRole] ?? "text-gray-400 bg-white/5 border-white/10";
 
   return (
     <div className="flex min-h-screen w-full bg-black font-sans">
-      <div className="relative flex flex-col flex-1 z-10 w-full px-3 pb-3 pt-2 md:pl-6 md:pr-6 md:pb-6 md:pt-4">
-        {/* Header - Hub Style */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 md:mb-8 pb-2 md:pb-4 border-b border-[#1a1a1a]">
-          <div className="flex flex-col">
-            <h1 className="text-2xl md:text-4xl font-bold font-sans text-white uppercase tracking-tighter leading-none">
+      {/* Ambient glow behind content */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-red-600/5 blur-[140px] rounded-full" />
+      </div>
+
+      <div className="relative z-10 flex flex-col flex-1 w-full px-4 sm:px-6 lg:px-10 pb-8 pt-4 md:pt-5 max-w-7xl mx-auto">
+        {/* ── Header ── */}
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-5 border-b border-white/5">
+          {/* Left: title + user info */}
+          <div className="flex flex-col gap-3">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-wide leading-none">
               Command Center
             </h1>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="bg-green-600 text-black text-[10px] font-bold uppercase tracking-widest px-2 py-0.5">
-                {userRole} Mode
+
+            {/* User info row */}
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Role badge */}
+              <span
+                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.15em] border ${rolePill}`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 animate-pulse" />
+                {roleLabel[userRole] ?? userRole}
               </span>
-              <span className="text-gray-500 font-sans text-xs uppercase tracking-widest">
-                {"// Welcome, "}
-                {userName}
-              </span>
+
+              {/* Name */}
+              <div className="flex items-center gap-1.5 text-gray-400 text-sm">
+                <UserCircle2 size={13} className="shrink-0" />
+                <span className="tracking-wide">{userName}</span>
+              </div>
+
+              {/* Email */}
+              <div className="flex items-center gap-1.5 text-gray-500 text-xs">
+                <Mail size={11} className="shrink-0" />
+                <span className="tracking-wide">{userEmail}</span>
+              </div>
+
+              {/* Session active dot */}
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-green-500 text-xs font-semibold uppercase tracking-[0.15em]">
+                  Live
+                </span>
+              </div>
             </div>
           </div>
 
+          {/* Right: controls */}
           <HubUserControls />
         </header>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Main Navigation Grid */}
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 content-start">
-            {/* Admin Link - Only for Admin */}
+        {/* ── Portal Cards ── */}
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            {/* Admin — admin only */}
             {userRole === "admin" && (
-              <Link href="/dashboard/admin" className="block group">
-                <Card className="h-full bg-[#0a0a0a] border border-[#1a1a1a] text-white rounded-xl transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:">
-                  <CardHeader className="bg-[#0a0a0a] border-b border-[#1a1a1a] pb-4 pt-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Shield className="w-5 h-5 text-red-500" />
-                      <CardTitle className="font-sans text-xl text-white uppercase tracking-wide">
-                        Admin Console
-                      </CardTitle>
-                    </div>
-                    <CardDescription className="text-gray-400 font-sans text-xs uppercase tracking-wider">
-                      Complete system control.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-3 md:p-6">
-                    <p className="text-sm text-gray-400 font-sans">
-                      Manage users, courses, mentors, and platform settings.
-                    </p>
-                    <div className="mt-4 flex items-center text-red-500 font-bold text-xs uppercase tracking-widest">
-                      <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+              <PortalCard
+                href="/dashboard/admin"
+                icon={Shield}
+                iconColor="text-red-500"
+                glowColor="bg-red-500/5"
+                borderHover="hover:border-red-500/25"
+                badge="Admin"
+                badgeClass="text-red-500 bg-red-500/10 border-red-500/20"
+                title="Admin Console"
+                description="Manage users, courses, mentors, and platform settings. Complete system control."
+              />
             )}
 
-            {/* Mentor Link - For Admin and Mentor */}
+            {/* Mentor — admin + mentor */}
             {(userRole === "admin" || userRole === "mentor") && (
-              <Link href="/dashboard/mentor" className="block group">
-                <Card className="h-full bg-[#0a0a0a] border border-[#1a1a1a] text-white rounded-xl transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:">
-                  <CardHeader className="bg-[#0a0a0a] border-b border-[#1a1a1a] pb-4 pt-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Users className="w-5 h-5 text-purple-500" />
-                      <CardTitle className="font-sans text-xl text-white uppercase tracking-wide">
-                        Mentor Portal
-                      </CardTitle>
-                    </div>
-                    <CardDescription className="text-gray-400 font-sans text-xs uppercase tracking-wider">
-                      Student management & grading.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-3 md:p-6">
-                    <p className="text-sm text-gray-400 font-sans">
-                      Track student progress, grade assignments, and clear
-                      doubts.
-                    </p>
-                    <div className="mt-4 flex items-center text-purple-500 font-bold text-xs uppercase tracking-widest">
-                      <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+              <PortalCard
+                href="/dashboard/mentor"
+                icon={Users}
+                iconColor="text-purple-400"
+                glowColor="bg-purple-500/5"
+                borderHover="hover:border-purple-500/25"
+                badge="Mentor"
+                badgeClass="text-purple-400 bg-purple-500/10 border-purple-500/20"
+                title="Mentor Portal"
+                description="Track student progress, grade assignments, and clear doubts."
+              />
             )}
 
-            {/* Student Link - For Everyone */}
-            <Link href="/dashboard/student" className="block group">
-              <Card className="h-full bg-[#0a0a0a] border border-[#1a1a1a] text-white rounded-xl transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:">
-                <CardHeader className="bg-[#0a0a0a] border-b border-[#1a1a1a] pb-4 pt-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <GraduationCap className="w-5 h-5 text-blue-500" />
-                    <CardTitle className="font-sans text-xl text-white uppercase tracking-wide">
-                      Student Portal
-                    </CardTitle>
-                  </div>
-                  <CardDescription className="text-gray-400 font-sans text-xs uppercase tracking-wider">
-                    Learning & submissions.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-3 md:p-6">
-                  <p className="text-sm text-gray-400 font-sans">
-                    Access course materials, submit work, and view progress.
-                  </p>
-                  <div className="mt-4 flex items-center text-blue-500 font-bold text-xs uppercase tracking-widest">
-                    <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+            {/* Student — everyone */}
+            <PortalCard
+              href="/dashboard/student"
+              icon={GraduationCap}
+              iconColor="text-blue-400"
+              glowColor="bg-blue-500/5"
+              borderHover="hover:border-blue-500/25"
+              badge="Student"
+              badgeClass="text-blue-400 bg-blue-500/10 border-blue-500/20"
+              title="Student Portal"
+              description="Access course materials, submit work, and view your learning progress."
+            />
 
-            {/* Recruiter Link - For Admin and Recruiter */}
+            {/* Recruiter — admin + recruiter */}
             {(userRole === "admin" || userRole === "recruiter") && (
-              <Link href="/dashboard/recruiter" className="block group">
-                <Card className="h-full bg-[#0a0a0a] border border-[#1a1a1a] text-white rounded-xl transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:">
-                  <CardHeader className="bg-[#0a0a0a] border-b border-[#1a1a1a] pb-4 pt-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Briefcase className="w-5 h-5 text-yellow-500" />
-                      <CardTitle className="font-sans text-xl text-white uppercase tracking-wide">
-                        Recruiter Portal
-                      </CardTitle>
-                    </div>
-                    <CardDescription className="text-gray-400 font-sans text-xs uppercase tracking-wider">
-                      Talent acquisition.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-3 md:p-6">
-                    <p className="text-sm text-gray-400 font-sans">
-                      Search for candidates and manage job postings.
-                    </p>
-                    <div className="mt-4 flex items-center text-yellow-500 font-bold text-xs uppercase tracking-widest">
-                      <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+              <PortalCard
+                href="/dashboard/recruiter"
+                icon={Briefcase}
+                iconColor="text-yellow-400"
+                glowColor="bg-yellow-500/5"
+                borderHover="hover:border-yellow-500/25"
+                badge="Recruiter"
+                badgeClass="text-yellow-400 bg-yellow-500/10 border-yellow-500/20"
+                title="Recruiter Portal"
+                description="Search for candidates and manage job postings."
+              />
             )}
 
-            {/* Partner Agency Link - For Admin and Partner Agency */}
+            {/* Partner — admin + partner_agency */}
             {(userRole === "admin" || userRole === "partner_agency") && (
-              <Link href="/dashboard/partner" className="block group">
-                <Card className="h-full bg-[#0a0a0a] border border-[#1a1a1a] text-white rounded-xl transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:">
-                  <CardHeader className="bg-[#0a0a0a] border-b border-[#1a1a1a] pb-4 pt-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Briefcase className="w-5 h-5 text-green-500" />
-                      <CardTitle className="font-sans text-xl text-white uppercase tracking-wide">
-                        Partner Portal
-                      </CardTitle>
-                    </div>
-                    <CardDescription className="text-gray-400 font-sans text-xs uppercase tracking-wider">
-                      Agency Stats & Revenue.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-3 md:p-6">
-                    <p className="text-sm text-gray-400 font-sans">
-                      Track coupon usage and revenue share.
-                    </p>
-                    <div className="mt-4 flex items-center text-green-500 font-bold text-xs uppercase tracking-widest">
-                      <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+              <PortalCard
+                href="/dashboard/partner"
+                icon={Handshake}
+                iconColor="text-green-400"
+                glowColor="bg-green-500/5"
+                borderHover="hover:border-green-500/25"
+                badge="Partner"
+                badgeClass="text-green-400 bg-green-500/10 border-green-500/20"
+                title="Partner Portal"
+                description="Track coupon usage and revenue share for your agency."
+              />
             )}
-          </div>
-
-          {/* User Details Sidebar */}
-          <div className="w-full lg:w-80 shrink-0">
-            <Card className="bg-[#0a0a0a] border border-[#1a1a1a] text-white rounded-xl">
-              <CardHeader className="bg-[#0a0a0a] border-b border-[#1a1a1a] pb-4 pt-4">
-                <div className="flex items-center gap-2 mb-1">
-                  <User className="w-5 h-5 text-gray-400" />
-                  <CardTitle className="font-sans text-xl text-white uppercase tracking-wide">
-                    Identity
-                  </CardTitle>
-                </div>
-                <CardDescription className="text-gray-400 font-sans text-xs uppercase tracking-wider">
-                  Current Session Details
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-3 md:p-6 space-y-4 md:space-y-6">
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-sans uppercase tracking-widest block">
-                    Full Name
-                  </label>
-                  <div className="font-sans text-sm break-all">{userName}</div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-sans uppercase tracking-widest flex items-center gap-1">
-                    <Mail className="w-3 h-3" /> Email Address
-                  </label>
-                  <div className="font-sans text-sm break-all text-gray-300">
-                    {userEmail}
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-sans uppercase tracking-widest flex items-center gap-1">
-                    <Fingerprint className="w-3 h-3" /> User ID
-                  </label>
-                  <div className="font-sans text-xs break-all py-2 px-3 bg-[#0a0a0a] border border-[#1a1a1a] rounded-sm text-gray-400">
-                    {userId}
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-[#1a1a1a]">
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-xs font-sans text-green-500 uppercase tracking-widest">
-                      Session Active
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+/* ── PortalCard Component ── */
+function PortalCard({
+  href,
+  icon: Icon,
+  iconColor,
+  glowColor,
+  borderHover,
+  badge,
+  badgeClass,
+  title,
+  description,
+}: {
+  href: string;
+  icon: React.ElementType;
+  iconColor: string;
+  glowColor: string;
+  borderHover: string;
+  badge: string;
+  badgeClass: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <Link href={href} className="block group">
+      <div
+        className={`relative flex flex-col gap-4 p-5 rounded-2xl bg-linear-to-b from-white/5 to-transparent border border-white/5 backdrop-blur-md overflow-hidden transition-all duration-500 ${borderHover} hover:shadow-2xl hover:-translate-y-1`}
+      >
+        {/* Hover ambient glow */}
+        <div
+          className={`absolute -inset-4 blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 ${glowColor} -z-10`}
+        />
+
+        {/* Top row: icon + badge */}
+        <div className="flex items-center justify-between">
+          <div
+            className={`p-3 rounded-xl border border-white/5 bg-white/5 ${iconColor}`}
+          >
+            <Icon size={20} strokeWidth={1.8} />
+          </div>
+          <span
+            className={`text-xs font-bold uppercase tracking-[0.15em] px-2.5 py-1 rounded-full border ${badgeClass}`}
+          >
+            {badge}
+          </span>
+        </div>
+
+        {/* Content */}
+        <div className="flex flex-col gap-2">
+          <h2
+            className={`text-white text-sm sm:text-base font-bold tracking-wide group-hover:${iconColor} transition-colors duration-300`}
+          >
+            {title}
+          </h2>
+          <p className="text-gray-500 text-xs leading-relaxed tracking-wide">
+            {description}
+          </p>
+        </div>
+
+        {/* CTA row */}
+        <div
+          className={`flex items-center gap-2 text-sm font-semibold tracking-wide mt-auto pt-3 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${iconColor}`}
+        >
+          Open Portal
+          <ArrowRight
+            size={14}
+            className="group-hover:translate-x-1 transition-transform"
+          />
+        </div>
+      </div>
+    </Link>
   );
 }
